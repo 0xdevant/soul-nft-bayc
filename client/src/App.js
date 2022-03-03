@@ -10,6 +10,8 @@ import ApeErrorPopup from "./components/ApeErrorPopup";
 import AuctionSections from "./components/AuctionSections";
 import AuctionWinner from "./components/AuctionWinner";
 import Redeem from "./components/Redeem";
+import NFT001 from "./components/NFT001";
+import NFT002 from "./components/NFT002";
 
 function App() {
   return (
@@ -24,7 +26,16 @@ function App() {
         <Route path="/redeem">
           <Redeem />
         </Route>
+        <Route path="/gallery/1">
+          <NFT001 />
+        </Route>
+        <Route path="/gallery/2">
+          <NFT002 />
+        </Route>
         <Route exact path="/">
+          <Home />
+        </Route>
+        <Route path="*">
           <Home />
         </Route>
       </Switch>

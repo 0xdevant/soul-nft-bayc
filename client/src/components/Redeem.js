@@ -25,18 +25,22 @@ function Redeem() {
   const [selectedToken, setSelectedToken] = useState(null);
   const [selectedTokenArrayIndex, setSelectedTokenArrayIndex] = useState(null);
   const [isApeSelect, setIsApeSelect] = useState(false);
+
+  /* testnet addresses
   const goldenTicketContractAddress =
     "0x88B48F654c30e99bc2e4A1559b4Dcf1aD93FA656";
   const goldenTicketTokenId =
     "21787024092457674230796483934239099902041147234590111229764665228742539345921";
   const goldenTicket2TokenId =
     "21787024092457674230796483934239099902041147234590111229764665230941562601473";
-
+  */
+  const goldenTicketContractAddress =
+    "0x495f947276749Ce646f68AC8c248420045cb7b5e";
   //mainnet golden ticket
-  /*const goldenTicketTokenId =
+  const goldenTicketTokenId =
     "20380798278448505662861399834612724564619233566642749688288578969202258345985";
   const goldenTicket2TokenId =
-    "20380798278448505662861399834612724564619233566642749688288578970301769973761";*/
+    "20380798278448505662861399834612724564619233566642749688288578970301769973761";
 
   useEffect(() => {
     const checkConnection = async () => {
@@ -143,7 +147,7 @@ function Redeem() {
       //console.log(numOfAllTokens);
       //users doesn't have any BAYC / MAYC, end the check
       if (numOfAllTokens.baycs === 0 && numOfAllTokens.maycs === 0) {
-        console.log("You don't have any Ape NFTs");
+        setError("You don't have any Ape NFTs");
         return;
       }
       try {
@@ -354,11 +358,15 @@ function Redeem() {
       const goldenTicketBalance = await contract.methods
         .checkGoldenTicketBalance(accounts[0], goldenTicketTokenId)
         .call();
+      const goldenTicket2Balance = await contract.methods
+        .checkGoldenTicketBalance(accounts[0], goldenTicket2TokenId)
+        .call();
       setLoading(false);
       //user doesn't own any BAYC or MAYC
       if (
         (parseInt(userBAYCBalance) === 0 && parseInt(userMAYCBalance) === 0) ||
-        parseInt(goldenTicketBalance) === 0
+        (parseInt(goldenTicketBalance) === 0 &&
+          parseInt(goldenTicket2Balance) === 0)
       ) {
         setGoldenTicketErrorPopupActive(true);
         return;
@@ -733,6 +741,7 @@ function Redeem() {
                     after you submit the Golden Ticket NFT.
                   </b>
                 </p>
+                <div className="text-red-600 font-bold">{error}</div>
                 <Link
                   to="/terms"
                   target="_blank"
